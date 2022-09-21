@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+<robot name="bracciorobot" xmlns:xacro="http://www.ros.org/wiki/xacro" >
+
+
+
+    <transmission name="Joint1_trans">
+        <type> transmission_interface/SimpleTransmission </type>
+        <joint name="Joint1">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Joint1_actu">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="Joint2_trans">
+        <type> transmission_interface/SimpleTransmission </type>
+        <joint name="Joint2">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Joint2_actu">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="Joint3_trans">
+        <type> transmission_interface/SimpleTransmission </type>
+        <joint name="Joint3">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Joint3_actu">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="Joint4_trans">
+        <type> transmission_interface/SimpleTransmission </type>
+        <joint name="Joint4">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Joint4_actu">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="Joint5_trans">
+        <type> transmission_interface/SimpleTransmission </type>
+        <joint name="Joint5">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Joint5_actu">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+    <transmission name="Joint6_trans">
+        <type> transmission_interface/SimpleTransmission </type>
+        <joint name="Joint6">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Joint6_actu">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+
+    <transmission name="gripperJoint_trans">
+        <type> transmission_interface/SimpleTransmission </type>
+        <joint name="Claw">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="gripperJoint_actu">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+
+
+  
+ 
+</robot>

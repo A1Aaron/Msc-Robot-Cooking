@@ -1,0 +1,278 @@
+<?xml version="1.0" ?>
+<robot name="mycobot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:property name="body_color" value="Gazebo/White"/>
+<xacro:property name="base_color" value="Gazebo/Grey" />
+<xacro:property name="pad_color" value="Gazebo/Black"/>
+<xacro:property name="standard_friction" value="2.0" />
+
+
+
+
+<gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/mycobot1</robotNamespace>        
+        </plugin>
+</gazebo>
+
+<gazebo>
+   <plugin name="gazebo_grasp_fix" filename="libgazebo_grasp_fix.so">
+        <arm>
+           <arm_name>mycobot</arm_name>
+           <palm_link>Link7_v7_1</palm_link>
+           <gripper_link>Claw_v6_2</gripper_link>
+           <gripper_link>Claw_v6__1__2</gripper_link>
+           <gripper_link>Claw_v6__2__2</gripper_link>
+           <gripper_link>Claw_v6__3__2</gripper_link>
+        </arm>
+       <forces_angle_tolerance>100</forces_angle_tolerance>
+       <update_rate>4</update_rate>
+       <grip_count_threshold>4</grip_count_threshold>
+       <max_grip_count>8</max_grip_count>
+       <release_tolerance>0.005</release_tolerance>
+       <disable_collisions_on_attach>false</disable_collisions_on_attach>
+       <contact_topic>__default_topic__</contact_topic>
+    </plugin>
+</gazebo>
+
+
+
+
+
+<!-- Used for fixing robot to Gazebo 'base_link' -->
+<link name="world"/>
+
+<joint name="fixed" type="fixed">
+<parent link="world"/>
+<child link="base_link"/>
+</joint>
+
+<gazebo reference="base_link">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${base_color}</material>
+    <selfCollide>false</selfCollide>
+    <gravity>true</gravity>
+</gazebo>
+
+<gazebo reference="Base_v8_1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${base_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="Link2_v11_1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${body_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="Link3_v4_1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${body_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="Link4_v5_1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${body_color}</material>
+    <selfCollide>false</selfCollide>
+</gazebo>
+
+<gazebo reference="Link5_v17_1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${body_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="Link6_v7_1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${body_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="Link7_v7_1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${base_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<!-- ############################## CLAW GRIPPER ####################################-->
+<gazebo reference="endpiece_v1_2">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${pad_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="clawbase_v5_2">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${pad_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="claw-bottom_v11__2__2">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${pad_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="claw-bottom_v11_2">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${pad_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="claw-bottom_v11__3__2">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${pad_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="claw-bottom_v11__1__2">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${pad_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="Claw_v6_2">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${pad_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="Claw_v6__3__2">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${pad_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="Claw_v6__2__2">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${pad_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="Claw_v6__1__2">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${pad_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+
+<!-- ##################################### ORIGINAL GRIPPER ###########################
+<gazebo reference="CobotBody1_v2_1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${body_color}</material>
+    <selfCollide>false</selfCollide>
+     
+</gazebo>
+
+<gazebo reference="CobotBody2_v1_1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${body_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="grippergear_v1_1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${body_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="grippergear_v1__1__1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${body_color}</material>
+    <selfCollide>false</selfCollide>
+
+    
+</gazebo>
+
+<gazebo reference="gripperfinger_v1__1__1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${body_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="gripperfinger_v1_1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${body_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="gripperLink_v1__1__1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${body_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="gripperLink_v1_1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${body_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="fingerpad_2">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${pad_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo>
+
+<gazebo reference="fingerpad_1">
+    <mu1>${standard_friction}</mu1>
+    <mu2>${standard_friction}</mu2>
+    <material>${pad_color}</material>
+    <selfCollide>false</selfCollide>
+    
+</gazebo> -->
+
+
+</robot>

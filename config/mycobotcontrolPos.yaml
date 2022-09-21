@@ -1,0 +1,45 @@
+# Publish all joint states ----------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+# Position Controllers--------------------------------
+  arm:
+    type: position_controllers/JointTrajectoryController
+    joints: 
+      - Joint1 
+      - Joint2 
+      - Joint3 
+      - Joint4
+      - Joint5
+      - Joint6
+  
+    constraints:
+      goal_time: 0.6
+      stopped_velocity_tolerance: 0.05
+      Joint1: {trajectory: 0.1, goal: 0.1}
+      Joint2: {trajectory: 0.1, goal: 0.1}
+      Joint3: {trajectory: 0.1, goal: 0.1}
+      Joint4: {trajectory: 0.1, goal: 0.1}
+      Joint5: {trajectory: 0.1, goal: 0.1}
+      Joint6: {trajectory: 0.1, goal: 0.1}
+
+    stop_trajectory_duration: 0.5
+    state_publish_rate: 25
+    action_monitor_rate: 10
+
+  gripper:
+    type: position_controllers/JointTrajectoryController
+    joints: 
+      - Claw
+
+    contraints:
+      goal_time: 0.6
+      stopped_velocity_tolerance: 0.05
+      Claw: {trajectory: 0.1, goal: 0.1}
+
+    stop_trajectory_duration: 0.5
+    state_publish_rate: 25
+    action_monitor_rate: 10
+
+ 

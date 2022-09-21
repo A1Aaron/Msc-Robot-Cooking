@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<launch>
+    <!-- Uploading URDF  -->
+    <param name="robot_description" command="xacro '$(find mycobot)/urdf/mycobot.gazeboPos.xacro'" />
+    <!-- <param name="ignore_timestamp" value="true" /> -->
+   
+
+    <!-- Uploading cofig file -->
+    <arg name="rvizconfig" default="$(find mycobot)/config/mycobot.rviz" />
+    <arg name="gui" default = "true" doc="Determines wether gui is used or not"/>
+
+    <!-- Package to publlish robot state to tf -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" >
+      <param name="use_tf_static" value="true"/>
+    </node>
+
+
+    <!-- Package to publish joint states via gui -->
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" if = "$(eval arg('gui') == true)" />
+
+    <!-- Launching rviz with the specified config file -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)"/>
+
+</launch>

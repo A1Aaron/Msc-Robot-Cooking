@@ -1,0 +1,1215 @@
+<?xml version="1.0" ?>
+<robot name="mycobot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find mycobot)/urdf/materials.xacro" />
+<xacro:include filename="$(find mycobot)/urdf/transmissionPos.xacro" />
+<xacro:include filename="$(find mycobot)/urdf/gazebo.xacro" />
+<xacro:property name="effort" value="10.0"/>
+<xacro:property name="velocity" value="0.5"/>
+<xacro:property name="friction" value="0.5"/>
+<xacro:property name="damping" value="0.03"/>
+
+
+<xacro:macro name="mimic_joint_plugin_gazebo" params="name_prefix parent_joint mimic_joint has_pid:=true multiplier:=1.0 offset:=0 sensitiveness:=0.0 max_effort:=1.0 robot_namespace:='/mycobot1'">
+  <gazebo>
+    <plugin name="${name_prefix}mimic_joint_plugin" filename="libroboticsgroup_upatras_gazebo_mimic_joint_plugin.so">
+      <joint>${parent_joint}</joint>
+      <mimicJoint>${mimic_joint}</mimicJoint>
+      <xacro:if value="${has_pid}">                     <!-- if set to true, PID parameters from "/gazebo_ros_control/pid_gains/${mimic_joint}" are loaded -->
+        <hasPID />
+      </xacro:if>
+      <multiplier>${multiplier}</multiplier>
+      <offset>${offset}</offset>
+      <sensitiveness>${sensitiveness}</sensitiveness>   <!-- if absolute difference between setpoint and process value is below this threshold, do nothing; 0.0 = disable [rad] -->
+      <maxEffort>${max_effort}</maxEffort>              <!-- only taken into account if has_pid:=true [Nm] -->
+      <xacro:unless value="${robot_namespace == '/mycobot1'}">
+        <robotNamespace>${robot_namespace}</robotNamespace>
+      </xacro:unless>
+    </plugin>
+  </gazebo>
+</xacro:macro>
+
+<link name="base_link">
+  
+  <!-- <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link> -->
+
+<visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <box size="0.5 0.5 0.01"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+       <box size="0.5 0.5 0.01"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Base_v8_1">
+  <inertial>
+    <origin xyz="-0.0007674952002842419 -0.00015853874615712218 0.038132613312138734" rpy="0 0 0"/>
+    <mass value="1.76519268648240446"/>
+    <inertia ixx="0.000215" iyy="0.000214" izz="0.000427" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.0 -0.0 -0.0005" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Base_v8_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.0 -0.0 -0.0005" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Base_v8_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Link2_v11_1">
+  <inertial>
+    <origin xyz="0.00493234364366476 -0.00029024291869713694 0.040093567041392386" rpy="0 0 0"/>
+    <mass value="0.2785186125385807"/>
+    <inertia ixx="0.000478" iyy="0.000461" izz="4.3e-05" ixy="-0.0" iyz="-0.0" ixz="-3.7e-05"/>
+  </inertial>
+  <visual>
+    <origin xyz="0.0 -0.0 -0.0815" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Link2_v11_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+  <collision>
+    <origin xyz="0.0 -0.0 -0.0815" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Link2_v11_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Link3_v4_1">
+  <inertial>
+    <origin xyz="0.025442789888904478 4.750811867512109e-05 0.054179869855452395" rpy="0 0 0"/>
+    <mass value="0.185186125385807"/>
+    <inertia ixx="0.000478" iyy="0.000461" izz="4.3e-05" ixy="-0.0" iyz="-0.0" ixz="-3.7e-05"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.033616 0.000561 -0.13974" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Link3_v4_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.033616 0.000561 -0.13974" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Link3_v4_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Link4_v5_1">
+  <inertial>
+    <origin xyz="-0.02758732009433006 4.597686248857067e-07 0.046114204196164466" rpy="0 0 0"/>
+    <mass value="0.18425390113795425"/>
+    <inertia ixx="0.000692" iyy="0.000665" izz="5.7e-05" ixy="-0.0" iyz="-0.0" ixz="4.4e-05"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.030392 0.000524 -0.250217" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Link4_v5_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.030392 0.000524 -0.250217" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Link4_v5_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Link5_v17_1">
+  <inertial>
+    <origin xyz="0.024931350905881843 -0.0006156299812604405 0.01084040158683891" rpy="0 0 0"/>
+    <mass value="0.1185186125385807"/>
+    <inertia ixx="0.000478" iyy="0.000461" izz="4.3e-05" ixy="-0.0" iyz="-0.0" ixz="-3.7e-05"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.030892 0.000524 -0.346117" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Link5_v17_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.030892 0.000524 -0.346117" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Link5_v17_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Link6_v7_1">
+  <inertial>
+    <origin xyz="-5.219821113858214e-06 0.003892509541421077 0.031003933303585918" rpy="0 0 0"/>
+   <mass value="0.0785186125385807"/>
+    <inertia ixx="0.000478" iyy="0.000461" izz="4.3e-05" ixy="-0.0" iyz="-0.0" ixz="-3.7e-05"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.063371 0.000626 -0.379756" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Link6_v7_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.063371 0.000626 -0.379756" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Link6_v7_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Link7_v7_1">
+  <inertial>
+    <origin xyz="-1.694662708301431e-06 0.00681634498427619 -3.0979888756110796e-05" rpy="0 0 0"/>
+     <mass value="0.08993217084915655"/>
+    <inertia ixx="0.000215" iyy="0.000214" izz="0.000427" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.063365 -0.031968 -0.418681" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Link7_v7_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.063365 -0.031968 -0.418681" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Link7_v7_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+
+<link name="Pickpoint">
+  <visual>
+    <origin xyz="0. 0 0" rpy="0 0 0"/>
+    <geometry>
+      <sphere radius="0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+</link>
+
+
+<!-- ################# CLAW GRIPER ########################## -->
+<!-- <link name="endpiece_v1_2">
+  <inertial>
+    <origin xyz="-1.0298025045402115e-05 0.0192405115414713 1.2686943421102992e-05" rpy="0 0 0"/>
+    <mass value="0.09888353150886842"/>
+    <inertia ixx="3.5e-05" iyy="1.7e-05" izz="3.5e-05" ixy="-0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.063365 -0.045668 -0.418683" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/endpiece_v1_2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.063365 -0.045668 -0.418683" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/endpiece_v1_2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="clawbase_v5_2">
+  <inertial>
+    <origin xyz="-0.008001476377758318 0.026680915344439303 0.008003032083789052" rpy="0 0 0"/>
+    <mass value="0.054104408660758045"/>
+    <inertia ixx="9e-06" iyy="8e-06" izz="9e-06" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.071366 -0.051669 -0.410685" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/clawbase_v5_2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.071366 -0.051669 -0.410685" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/clawbase_v5_2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="claw-bottom_v11__2__2">
+  <inertial>
+    <origin xyz="0.0036197075326947215 0.007245866703756543 -0.0002071241047622574" rpy="0 0 0"/>
+    <mass value="0.01844388763495816"/>
+    <inertia ixx="1e-06" iyy="1e-06" izz="1e-06" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.080366 -0.084418 -0.418692" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/claw-bottom_v11__2__2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.080366 -0.084418 -0.418692" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/claw-bottom_v11__2__2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="claw-bottom_v11_2">
+  <inertial>
+    <origin xyz="-0.003619660096897799 0.007245804612862297 0.0002090524096581281" rpy="0 0 0"/>
+    <mass value="0.01844388763495816"/>
+    <inertia ixx="1e-06" iyy="1e-06" izz="1e-06" ixy="0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.046363 -0.084418 -0.418686" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/claw-bottom_v11_2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.046363 -0.084418 -0.418686" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/claw-bottom_v11_2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="claw-bottom_v11__3__2">
+  <inertial>
+    <origin xyz="0.00020761197745820803 0.007245714105305098 0.003621147730980101" rpy="0 0 0"/>
+    <mass value="0.01844388763495816"/>
+    <inertia ixx="1e-06" iyy="1e-06" izz="1e-06" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.063362 -0.084415 -0.43569" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/claw-bottom_v11__3__2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.063362 -0.084415 -0.43569" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/claw-bottom_v11__3__2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="claw-bottom_v11__1__2">
+  <inertial>
+    <origin xyz="-0.0002075645416614036 0.0072459572113137555 -0.0036182194260842016" rpy="0 0 0"/>
+    <mass value="0.01844388763495816"/>
+    <inertia ixx="1e-06" iyy="1e-06" izz="1e-06" ixy="-0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.063367 -0.084421 -0.401687" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/claw-bottom_v11__1__2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.063367 -0.084421 -0.401687" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/claw-bottom_v11__1__2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Claw_v6_2">
+  <inertial>
+    <origin xyz="-0.0035269084786870714 0.042584451160620915 0.004005323901854707" rpy="0 0 0"/>
+    <mass value="0.036599885868990524"/>
+    <inertia ixx="1.5e-05" iyy="2e-06" izz="1.6e-05" ixy="-0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.040445 -0.100927 -0.414896" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Claw_v6_2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.040445 -0.100927 -0.414896" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Claw_v6_2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Claw_v6__3__2">
+  <inertial>
+    <origin xyz="0.004001012457275348 0.04258548532334448 -0.003518619250016508" rpy="0 0 0"/>
+    <mass value="0.036599885868990524"/>
+    <inertia ixx="1.6e-05" iyy="2e-06" izz="1.5e-05" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.05916 -0.10093 -0.39577" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Claw_v6__3__2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.05916 -0.10093 -0.39577" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Claw_v6__3__2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Claw_v6__2__2">
+  <inertial>
+    <origin xyz="0.0035249559144840403 0.042584512774075337 0.004007301385271833" rpy="0 0 0"/>
+    <mass value="0.03659988586899052"/>
+    <inertia ixx="1.5e-05" iyy="2e-06" izz="1.6e-05" ixy="0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.086286 -0.100927 -0.414487" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Claw_v6__2__2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.086286 -0.100927 -0.414487" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Claw_v6__2__2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="Claw_v6__1__2">
+  <inertial>
+    <origin xyz="-0.0040009650214784115 0.04258447861135188 0.0035312445371426526" rpy="0 0 0"/>
+    <mass value="0.03659988586899052"/>
+    <inertia ixx="1.6e-05" iyy="2e-06" izz="1.5e-05" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.067569 -0.100923 -0.441613" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Claw_v6__1__2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.067569 -0.100923 -0.441613" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/Claw_v6__1__2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="ReferencePick" type="fixed">
+  <origin xyz="0.0 0.115 0.0" rpy="0 0 0"/>
+  <parent link="Link7_v7_1"/>
+  <child link="Pickpoint"/>
+</joint>
+
+<joint name="Rigid33" type="fixed">
+  <origin xyz="0.0 0.0137 2e-06" rpy="0 0 0"/>
+  <parent link="Link7_v7_1"/>
+  <child link="endpiece_v1_2"/>
+</joint>
+
+<joint name="Rigid34" type="fixed">
+  <origin xyz="0.008001 0.006001 -0.007998" rpy="0 0 0"/>
+  <parent link="endpiece_v1_2"/>
+  <child link="clawbase_v5_2"/>
+</joint>
+
+<joint name="Rigid35" type="fixed">
+  <origin xyz="0.009 0.032749 0.008007" rpy="0 0 0"/>
+  <parent link="clawbase_v5_2"/>
+  <child link="claw-bottom_v11__2__2"/>
+</joint>
+
+<joint name="Rigid36" type="fixed">
+  <origin xyz="-0.025003 0.032749 0.008001" rpy="0 0 0"/>
+  <parent link="clawbase_v5_2"/>
+  <child link="claw-bottom_v11_2"/>
+</joint>
+
+<joint name="Rigid37" type="fixed">
+  <origin xyz="-0.008004 0.032746 0.025005" rpy="0 0 0"/>
+  <parent link="clawbase_v5_2"/>
+  <child link="claw-bottom_v11__3__2"/>
+</joint>
+
+<joint name="Rigid38" type="fixed">
+  <origin xyz="-0.007999 0.032752 -0.008998" rpy="0 0 0"/>
+  <parent link="clawbase_v5_2"/>
+  <child link="claw-bottom_v11__1__2"/>
+</joint>
+
+<joint name="Claw" type="revolute">
+  <origin xyz="-0.005918 0.016509 -0.00379" rpy="0 0 0"/>
+  <parent link="claw-bottom_v11_2"/>
+  <child link="Claw_v6_2"/>
+  <axis xyz="-0.000163 -0.000151 1.0"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+  <limit upper="0.55931" lower="0" effort="${effort}" velocity="${velocity}"/>
+
+</joint>
+
+<joint name="Claw2" type="revolute">
+  <origin xyz="-0.004207 0.016509 -0.005917" rpy="0 0 0"/>
+  <parent link="claw-bottom_v11__1__2"/>
+  <child link="Claw_v6__3__2"/>
+  <axis xyz="-1.0 0.0 -0.000163"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+  <mimic joint="Claw" multiplier="1"/>
+  <limit upper="0.55931" lower="0" effort="${effort}" velocity="${velocity}"/>
+</joint>
+
+<joint name="Claw3" type="revolute">
+  <origin xyz="0.00592 0.016509 -0.004205" rpy="0 0 0"/>
+  <parent link="claw-bottom_v11__2__2"/>
+  <child link="Claw_v6__2__2"/>
+  <axis xyz="-0.000163 -0.000151 1.0"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+  <mimic joint="Claw" multiplier="-1"/>
+  <limit upper="0" lower="-0.55931" effort="${effort}" velocity="${velocity}"/>
+</joint>
+
+<joint name="Claw4" type="revolute">
+  <origin xyz="0.004207 0.016508 0.005923" rpy="0 0 0"/>
+  <parent link="claw-bottom_v11__3__2"/>
+  <child link="Claw_v6__1__2"/>
+  <axis xyz="1.0 -0.0 0.000163"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+  <mimic joint="Claw" multiplier="1"/>
+  <limit upper="0.55931" lower="0" effort="${effort}" velocity="${velocity}"/>
+</joint>
+
+<xacro:mimic_joint_plugin_gazebo name_prefix="Claw2"
+  parent_joint="Claw" mimic_joint="Claw2"
+  has_pid="false" multiplier=" 1.0" max_effort="10" />
+
+<xacro:mimic_joint_plugin_gazebo name_prefix="Claw3"
+  parent_joint="Claw" mimic_joint="Claw3"
+  has_pid="false" multiplier="-1.0" max_effort="10" />
+
+<xacro:mimic_joint_plugin_gazebo name_prefix="Claw4"
+  parent_joint="Claw" mimic_joint="Claw4"
+  has_pid="false" multiplier="1.0" max_effort="10" />     -->
+
+<!--############################# MYCOBOTORIGINALGRIPPER ORIENTAION ONE ############################# -->
+<!-- <link name="CobotBody1_v2_1">
+  <inertial>
+    <origin xyz="-8.357701680450358e-07 0.004512564731161524 0.002795517973161965" rpy="0 0 0"/>
+    <mass value="0.00670785884592441"/>
+    <inertia ixx="0.000215" iyy="0.000214" izz="0.000427" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.063342 -0.045668 -0.418665" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/CobotBody1_v2_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.063342 -0.045668 -0.418665" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/CobotBody1_v2_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="CobotBody2_v1_1">
+  <inertial>
+    <origin xyz="-0.026063757620480132 0.01674104068617594 0.02820642582965488" rpy="0 0 0"/>
+    <mass value="0.00670785884592441"/>
+    <inertia ixx="0.000215" iyy="0.000214" izz="0.000427" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.091846 -0.060672 -0.394472" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/CobotBody2_v1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.091846 -0.060672 -0.394472" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/CobotBody2_v1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="grippergear_v1_1">
+  <inertial>
+    <origin xyz="0.002705167504311018 0.002499012903932174 0.006870340896664995" rpy="0 0 0"/>
+    <mass value="0.006993217084915655"/>
+    <inertia ixx="0.0000215" iyy="0.000014" izz="0.0000427" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.077841 -0.055167 -0.424469" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/grippergear_v1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.077841 -0.055167 -0.424469" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/grippergear_v1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="grippergear_v1__1__1">
+  <inertial>
+    <origin xyz="-0.0027080571792068853 0.0024990137527752254 0.006869733420279245" rpy="0 0 0"/>
+     <mass value="0.006993217084915655"/>
+   <inertia ixx="0.0000215" iyy="0.0000214" izz="0.0000427" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.048841 -0.055167 -0.424464" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/grippergear_v1__1__1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.048841 -0.055167 -0.424464" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/grippergear_v1__1__1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="gripperfinger_v1__1__1">
+  <inertial>
+    <origin xyz="-0.01050666723239789 -0.004005561578262332 0.03514243984841953" rpy="0 0 0"/>
+     <mass value="0.006993217084915655"/>
+    <inertia ixx="0.0000215" iyy="0.0000214" izz="0.0000427" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.087492 -0.055163 -0.45284" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/gripperfinger_v1__1__1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.087492 -0.055163 -0.45284" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/gripperfinger_v1__1__1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="gripperfinger_v1_1">
+  <inertial>
+    <origin xyz="0.010495317583895929 -0.004005560904628426 0.03514598980729" rpy="0 0 0"/>
+     <mass value="0.006993217084915655"/>
+    <inertia ixx="0.0000215" iyy="0.0000214" izz="0.0000427" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.03918 -0.055163 -0.452832" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/gripperfinger_v1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.03918 -0.055163 -0.452832" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/gripperfinger_v1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="gripperLink_v1__1__1">
+  <inertial>
+    <origin xyz="-0.005615687174371525 -0.0032817610569731773 0.013225353419611174" rpy="0 0 0"/>
+     <mass value="0.006993217084915655"/>
+    <inertia ixx="0.0000215" iyy="0.0000214" izz="0.0000427" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.057587 -0.054664 -0.446165" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/gripperLink_v1__1__1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.057587 -0.054664 -0.446165" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/gripperLink_v1__1__1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="gripperLink_v1_1">
+  <inertial>
+    <origin xyz="0.005611654105869071 -0.00372270633669166 0.013226989986681481" rpy="0 0 0"/>
+    <mass value="0.006993217084915655"/>
+   <inertia ixx="0.000215" iyy="0.0000214" izz="0.0000427" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.069087 -0.054664 -0.446167" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/gripperLink_v1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.069087 -0.054664 -0.446167" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/gripperLink_v1_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="fingerpad_2">
+  <inertial>
+    <origin xyz="-0.0009721314924830832 -0.010498532186619926 -0.012987657760781979" rpy="0 0 0"/>
+    <mass value="0.006993217084915655"/>
+   <inertia ixx="0.0000215" iyy="0.0000214" izz="0.0000427" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.067811 -0.061655 -0.507382" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/fingerpad_2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.067811 -0.061655 -0.507382" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/fingerpad_2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="fingerpad_1">
+  <inertial>
+    <origin xyz="0.0009766917252899618 0.010501467986515398 -0.012984801503293841" rpy="0 0 0"/>
+     <mass value="0.006993217084915655"/>
+   <inertia ixx="0.0000215" iyy="0.000214" izz="0.0000427" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.058843 -0.040655 -0.507378" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/fingerpad_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="black"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.058843 -0.040655 -0.507378" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes/fingerpad_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="ReferencePick" type="fixed">
+  <origin xyz="0.0 0.115 0.0" rpy="0 0 0"/>
+  <parent link="Link7_v7_1"/>
+  <child link="Pickpoint"/>
+</joint>
+
+<joint name="Rigid22" type="fixed">
+  <origin xyz="-2.3e-05 0.0137 -1.6e-05" rpy="0 0 0"/>
+  <parent link="Link7_v7_1"/>
+  <child link="CobotBody1_v2_1"/>
+</joint>
+
+<joint name="Rigid23" type="fixed">
+  <origin xyz="0.028504 0.015004 -0.024193" rpy="0 0 0"/>
+  <parent link="CobotBody1_v2_1"/>
+  <child link="CobotBody2_v1_1"/>
+</joint>
+
+<joint name="gripperJoint" type="revolute">
+  <origin xyz="0.014499 0.009499 0.005804" rpy="0 0 0"/>
+  <parent link="CobotBody1_v2_1"/>
+  <child link="grippergear_v1_1"/>
+  <axis xyz="0.0 1.0 0.000151"/>
+  <limit upper="1.57931" lower="0" effort="${effort}" velocity="${velocity}"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+</joint>
+
+<joint name="gripperJointM" type="revolute">
+  <origin xyz="-0.014501 0.009499 0.005799" rpy="0 0 0"/>
+  <parent link="CobotBody1_v2_1"/>
+  <child link="grippergear_v1__1__1"/>
+  <axis xyz="0.0 1.0 0.000151"/>
+  <limit upper="0" lower="-1.57931" effort="${effort}" velocity="${velocity}"/>
+  <mimic joint="gripperJoint" multiplier="-1"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+</joint>
+
+<joint name="fingerJoint" type="revolute">
+  <origin xyz="0.009651 -4e-06 0.028371" rpy="0 0 0"/>
+  <parent link="grippergear_v1_1"/>
+  <child link="gripperfinger_v1__1__1"/>
+  <axis xyz="-0.0 -1.0 -0.000151"/>
+  <mimic joint="gripperJoint" multiplier="1"/>
+  <limit upper="1.57931" lower="-1.57931" effort="${effort}" velocity="${velocity}"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+</joint>
+
+<joint name="fingerJointM" type="revolute">
+  <origin xyz="-0.009661 -4e-06 0.028368" rpy="0 0 0"/>
+  <parent link="grippergear_v1__1__1"/>
+  <child link="gripperfinger_v1_1"/>
+  <axis xyz="0.0 1.0 0.000151"/>
+  <mimic joint="fingerJoint" multiplier="1"/>
+  <limit upper="1.57931" lower="-1.57931" effort="${effort}" velocity="${velocity}"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+</joint>
+
+<joint name="linkageJointM" type="revolute">
+  <origin xyz="-0.005755 0.008996 0.0275" rpy="0 0 0"/>
+  <parent link="CobotBody1_v2_1"/>
+  <child link="gripperLink_v1__1__1"/>
+  <axis xyz="0.0 1.0 0.000151"/>
+  <mimic joint="linkageJoint" multiplier="1"/>
+  <limit upper="1.57931" lower="-1.57931" effort="${effort}" velocity="${velocity}"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+</joint>
+
+<joint name="linkageJoint" type="revolute">
+  <origin xyz="0.005745 0.008996 0.027502" rpy="0 0 0"/>
+  <parent link="CobotBody1_v2_1"/>
+  <child link="gripperLink_v1_1"/>
+  <axis xyz="-0.0 -1.0 -0.000151"/>
+  <mimic joint="gripperJoint" multiplier="-1"/>
+  <limit upper="1.57931" lower="-1.57931" effort="${effort}" velocity="${velocity}"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+</joint>
+
+<joint name="Rigid30" type="fixed">
+  <origin xyz="-0.019681 0.006492 0.054542" rpy="0 0 0"/>
+  <parent link="gripperfinger_v1__1__1"/>
+  <child link="fingerpad_2"/>
+</joint>
+
+<joint name="Rigid31" type="fixed">
+  <origin xyz="0.019663 -0.014508 0.054546" rpy="0 0 0"/>
+  <parent link="gripperfinger_v1_1"/>
+  <child link="fingerpad_1"/>
+</joint>
+
+<xacro:mimic_joint_plugin_gazebo name_prefix="linkageJoint"
+parent_joint="gripperJoint" mimic_joint="linkageJoint"
+has_pid="false" multiplier="-1.0" max_effort="10" />
+
+<xacro:mimic_joint_plugin_gazebo name_prefix="fingerJoint"
+parent_joint="gripperJoint" mimic_joint="fingerJoint"
+has_pid="false" multiplier="1.0" max_effort="10" />
+
+<xacro:mimic_joint_plugin_gazebo name_prefix="linkageJointM"
+parent_joint="linkageJoint" mimic_joint="linkageJointM"
+has_pid="false" multiplier="1.0" max_effort="10" />
+
+<xacro:mimic_joint_plugin_gazebo name_prefix="fingerJointM"
+parent_joint="fingerJoint" mimic_joint="fingerJointM"
+has_pid="false" multiplier="1.0" max_effort="10" /> 
+
+<xacro:mimic_joint_plugin_gazebo name_prefix="gripperJointM"
+parent_joint="gripperJoint" mimic_joint="gripperJointM"
+has_pid="false" multiplier="-1.0" max_effort="10" />  -->
+
+
+<!--############################# MYCOBOTORIGINALGRIPPER ORIENTAION TWO ############################# -->
+<link name="CobotBody1_v6_1">
+  <inertial>
+    <origin xyz="-0.02756607335265441 0.026996744232247016 -0.012737580384016955" rpy="0 0 0"/>
+    <mass value="0.04713602513670684"/>
+    <inertia ixx="2.3e-05" iyy="1.4e-05" izz="2.3e-05" ixy="0.0" iyz="-0.0" ixz="-7e-06"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.083514 -0.046665 -0.438839" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/CobotBody1_v6_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.083514 -0.046665 -0.438839" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/CobotBody1_v6_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="CobotBody2_v8_1">
+  <inertial>
+    <origin xyz="0.01354853014215554 0.029167692230647718 -0.010093312955097855" rpy="0 0 0"/>
+    <mass value="0.06728253732026138"/>
+    <inertia ixx="3.3e-05" iyy="2.9e-05" izz="3.8e-05" ixy="-1e-06" iyz="0.0" ixz="-7e-06"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.063365 -0.045668 -0.418683" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/CobotBody2_v8_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.063365 -0.045668 -0.418683" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/CobotBody2_v8_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="grippergear_v4_1">
+  <inertial>
+    <origin xyz="0.003681787468920672 0.006869589390317968 0.00014760336092256576" rpy="0 0 0"/>
+    <mass value="0.025493766775652973"/>
+    <inertia ixx="3e-06" iyy="1e-06" izz="3e-06" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.069726 -0.076666 -0.432831" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/grippergear_v4_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.069726 -0.076666 -0.432831" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/grippergear_v4_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="grippergear_v4__1__1">
+  <inertial>
+    <origin xyz="-0.0001450719826682767 0.006870273548366029 -0.00368018598106562" rpy="0 0 0"/>
+    <mass value="0.025493766775652973"/>
+    <inertia ixx="3e-06" iyy="1e-06" izz="3e-06" ixy="0.0" iyz="0.0" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.049223 -0.076669 -0.412321" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/grippergear_v4__1__1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.049223 -0.076669 -0.412321" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/grippergear_v4__1__1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="gripperfinger_v2__1__1">
+  <inertial>
+    <origin xyz="-0.010253110064007559 0.0351459363378961 -0.00459314994843163" rpy="0 0 0"/>
+    <mass value="0.08436998094688802"/>
+    <inertia ixx="2e-05" iyy="5e-06" izz="2e-05" ixy="3e-06" iyz="3e-06" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.076553 -0.105034 -0.439664" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/gripperfinger_v2__1__1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.076553 -0.105034 -0.439664" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/gripperfinger_v2__1__1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="gripperfinger_v2_1">
+  <inertial>
+    <origin xyz="0.004594939659581063 0.035142860051472546 0.010259606687857248" rpy="0 0 0"/>
+    <mass value="0.08436998094688802"/>
+    <inertia ixx="2e-05" iyy="5e-06" izz="2e-05" ixy="-3e-06" iyz="-3e-06" ixz="-0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.042397 -0.10504 -0.405497" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/gripperfinger_v2_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.042397 -0.10504 -0.405497" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/gripperfinger_v2_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="gripperLink_v2__1__1">
+  <inertial>
+    <origin xyz="-0.00628818154822873 0.013226594840114875 -0.0016491090671174602" rpy="0 0 0"/>
+    <mass value="0.016359169383963708"/>
+    <inertia ixx="2e-06" iyy="1e-06" izz="2e-06" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.055056 -0.098368 -0.418866" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/gripperLink_v2__1__1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.055056 -0.098368 -0.418866" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/gripperLink_v2__1__1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="gripperLink_v2_1">
+  <inertial>
+    <origin xyz="0.0014868052046226182 0.013320715488719811 0.006128076097648927" rpy="0 0 0"/>
+    <mass value="0.016359169383963708"/>
+    <inertia ixx="2e-06" iyy="1e-06" izz="2e-06" ixy="-0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.063186 -0.098367 -0.426999" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/gripperLink_v2_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.063186 -0.098367 -0.426999" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/gripperLink_v2_1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="fingerpad__1__2">
+  <inertial>
+    <origin xyz="0.008467925809456427 -0.012967480262240566 -0.006382980578978625" rpy="0 0 0"/>
+    <mass value="0.00115870520806515"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="0.0" iyz="0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.04605 -0.159581 -0.429669" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/fingerpad__1__2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.04605 -0.159581 -0.429669" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/fingerpad__1__2.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<link name="fingerpad__1__1">
+  <inertial>
+    <origin xyz="0.006383903786117043 -0.012967124725293766 -0.008467615441042076" rpy="0 0 0"/>
+    <mass value="0.00115870520806515"/>
+    <inertia ixx="0.0" iyy="0.0" izz="0.0" ixy="-0.0" iyz="-0.0" ixz="0.0"/>
+  </inertial>
+  <visual>
+    <origin xyz="-0.05239 -0.15958 -0.436011" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/fingerpad__1__1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin xyz="-0.05239 -0.15958 -0.436011" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://mycobot/meshes2/fingerpad__1__1.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+<joint name="ReferencePick" type="fixed">
+  <origin xyz="0.0 0.115 0.0" rpy="0 0 0"/>
+  <parent link="Link7_v7_1"/>
+  <child link="Pickpoint"/>
+
+</joint>
+<joint name="Rigid39" type="fixed">
+  <origin xyz="0.020149 0.000997 0.020156" rpy="0 0 0"/>
+  <parent link="CobotBody2_v8_1"/>
+  <child link="CobotBody1_v6_1"/>
+</joint>
+
+<joint name="GripperJoint" type="revolute">
+  <origin xyz="-0.013788 0.030001 -0.006008" rpy="0 0 0"/>
+  <parent link="CobotBody1_v6_1"/>
+  <child link="grippergear_v4_1"/>
+  <axis xyz="0.707222 0.000107 -0.706992"/>
+  <limit upper="1.57931" lower="0" effort="${effort}" velocity="${velocity}"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+</joint>
+
+<joint name="GripperJointM" type="revolute">
+  <origin xyz="-0.034291 0.030004 -0.026518" rpy="0 0 0"/>
+  <parent link="CobotBody1_v6_1"/>
+  <child link="grippergear_v4__1__1"/>
+  <axis xyz="0.707222 0.000107 -0.706992"/>
+  <limit upper="0" lower="-1.57931" effort="${effort}" velocity="${velocity}"/>
+  <mimic joint="GripperJoint" multiplier="-1"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+</joint>
+
+<joint name="LinkageJoint" type="revolute">
+  <origin xyz="-0.020328 0.051702 -0.01184" rpy="0 0 0"/>
+  <parent link="CobotBody1_v6_1"/>
+  <child link="gripperLink_v2_1"/>
+  <axis xyz="0.707222 0.000107 -0.706992"/>
+  <mimic joint="GripperJoint" multiplier="1"/>
+  <limit upper="1.57931" lower="-1.57931" effort="${effort}" velocity="${velocity}"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+</joint>
+
+<joint name="LinkageJointM" type="revolute">
+  <origin xyz="-0.028458 0.051703 -0.019973" rpy="0 0 0"/>
+  <parent link="CobotBody1_v6_1"/>
+  <child link="gripperLink_v2__1__1"/>
+  <axis xyz="0.707222 0.000107 -0.706992"/>
+  <mimic joint="LinkageJoint" multiplier="-1"/>
+  <limit upper="1.57931" lower="-1.57931" effort="${effort}" velocity="${velocity}"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+</joint>
+
+<joint name="FingerJointM" type="revolute">
+  <origin xyz="-0.006826 0.028371 -0.006824" rpy="0 0 0"/>
+  <parent link="grippergear_v4__1__1"/>
+  <child link="gripperfinger_v2_1"/>
+  <axis xyz="-0.707222 -0.000107 0.706992"/>
+  <mimic joint="FingerJoint" multiplier="-1"/>
+  <limit upper="1.57931" lower="-1.57931" effort="${effort}" velocity="${velocity}"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+</joint>
+
+<joint name="FingerJoint" type="revolute">
+  <origin xyz="0.006827 0.028368 0.006833" rpy="0 0 0"/>
+  <parent link="grippergear_v4_1"/>
+  <child link="gripperfinger_v2__1__1"/>
+  <axis xyz="-0.707222 -0.000107 0.706992"/>
+  <mimic joint="GripperJoint" multiplier="1"/>
+  <limit upper="1.57931" lower="-1.57931" effort="${effort}" velocity="${velocity}"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+</joint>
+
+<joint name="Rigid49" type="fixed">
+  <origin xyz="0.0 0.0137 2e-06" rpy="0 0 0"/>
+  <parent link="Link7_v7_1"/>
+  <child link="CobotBody2_v8_1"/>
+</joint>
+
+<joint name="Rigid52" type="fixed">
+  <origin xyz="-0.024163 0.054546 -0.003653" rpy="0 0 0"/>
+  <parent link="gripperfinger_v2__1__1"/>
+  <child link="fingerpad__1__1"/>
+</joint>
+
+<joint name="Rigid53" type="fixed">
+  <origin xyz="0.003653 0.054541 0.024172" rpy="0 0 0"/>
+  <parent link="gripperfinger_v2_1"/>
+  <child link="fingerpad__1__2"/>
+</joint>
+
+
+
+
+<!-- ############################## ROBOT BODY ############################# -->
+<joint name="Rigid6" type="fixed">
+  <origin xyz="0.0 0.0 0.0005" rpy="0 0 0"/>
+  <parent link="base_link"/>
+  <child link="Base_v8_1"/>
+</joint>
+
+<joint name="Joint1" type="revolute">
+  <origin xyz="-0.0 0.0 0.081" rpy="0 0 0"/>
+  <parent link="Base_v8_1"/>
+  <child link="Link2_v11_1"/>
+  <axis xyz="0.0 0.0 1.0"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+  <limit upper="3.14159" lower="-3.14159" effort="${effort}" velocity="${velocity}"/>
+</joint>
+    
+<joint name="Joint2" type="revolute">
+  <origin xyz="0.033616 -0.000561 0.05824" rpy="0 0 0"/>
+  <parent link="Link2_v11_1"/>
+  <child link="Link3_v4_1"/>
+  <axis xyz="1.0 0.0 0.0"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+  <limit upper="3.14159" lower="-3.14159" effort="${effort}" velocity="${velocity}"/>
+</joint>
+
+<joint name="Joint3" type="revolute">
+  <origin xyz="-0.003224 3.7e-05 0.110477" rpy="0 0 0"/>
+  <parent link="Link3_v4_1"/>
+  <child link="Link4_v5_1"/>
+  <axis xyz="1.0 0.0 0.0"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+  <limit upper="3.14159" lower="-3.14159" effort="${effort}" velocity="${velocity}"/>
+</joint>
+
+<joint name="Joint4" type="revolute">
+  <origin xyz="0.0005 0.0 0.0959" rpy="0 0 0"/>
+  <parent link="Link4_v5_1"/>
+  <child link="Link5_v17_1"/>
+  <axis xyz="1.0 0.0 0.0"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+  <limit upper="3.14159" lower="-3.14159" effort="${effort}" velocity="${velocity}"/>
+</joint>
+
+<joint name="Joint5" type="revolute">
+  <origin xyz="0.032479 -0.000102 0.033639" rpy="0 0 0"/>
+  <parent link="Link5_v17_1"/>
+  <child link="Link6_v7_1"/>
+  <axis xyz="-0.000163 -0.000151 1.0"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+  <limit upper="2.0943" lower="-2.879" effort="${effort}" velocity="${velocity}"/>
+</joint>
+
+<joint name="Joint6" type="revolute">
+  <origin xyz="-6e-06 0.032594 0.038925" rpy="0 0 0"/>
+  <parent link="Link6_v7_1"/>
+  <child link="Link7_v7_1"/>
+  <axis xyz="0.0 1.0 0.000151"/>
+  <dynamics damping="${damping}" friction="${friction}" />
+  <limit upper="3.14159" lower="-3.14159" effort="${effort}" velocity="${velocity}"/>
+</joint>
+
+
+
+</robot>
